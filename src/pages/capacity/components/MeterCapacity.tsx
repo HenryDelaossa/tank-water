@@ -2,9 +2,8 @@ import { FC } from 'react'
 import { useCapacityContext } from '../../../shared/contexts/capacityContext';
 
 const MeterCapacity: FC<IMeterCapacitiComponent> = ({ }) => {
+    // context
     const { info } = useCapacityContext();
-
-
 
     return (
         <div className='meter-container'>

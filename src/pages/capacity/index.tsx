@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Col, Row } from 'reactstrap'
 import FormCapacity from './components/FormCapacity'
@@ -8,7 +8,9 @@ import { useCapacityContext } from '../../shared/contexts/capacityContext';
 
 const Capacity: FC = () => {
 
+  // hooks
   const params = useParams();
+  // contexts
   const { getCapacityData } = useCapacityContext();
 
   useEffect(() => {

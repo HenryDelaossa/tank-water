@@ -17,6 +17,8 @@ export const CapacityProvider = ({ children }: PropsWithChildren) => {
     // states
     const [capacity, setCapacity] = useState<ICapacityData>(initialState?.capacityState);
     // Memo
+
+    /**calculos necesarios */
     const info = useMemo(() => {
 
         const cantidadtotal = transformDataTocm3(capacity?.lts, capacity?.mlts, capacity?.cm3);
@@ -34,21 +36,26 @@ export const CapacityProvider = ({ children }: PropsWithChildren) => {
     }, [capacity]);
 
 
+    /**fucion para obtener data por id segun params */
     const getCapacityData = async (id: number | string) => {
         const resp = await capacityShowService(id);
-        console.log(resp)
+        setCapacity(resp?.data)
     }
 
 
 
     useEffect(() => {
-        setCapacity(capacity)
-
+        setCapacity(capacity);
     }, [capacity]);
 
     return (
         <capacityContext.Provider
-            value={{ capacityState: capacity, setCapacityState: setCapacity, getCapacityData, info }}
+            value={{
+                capacityState: capacity,
+                setCapacityState: setCapacity,
+                getCapacityData,
+                info
+            }}
         >
             {children}
         </capacityContext.Provider>

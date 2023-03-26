@@ -4,12 +4,12 @@ import { ICapacityData, initialValuesCapacityForm, validatioSchemaCapacityForm }
 import { useCapacityContext } from '../../../shared/contexts/capacityContext';
 import { Input, Row, Col, FormGroup, Label, Button, FormFeedback } from 'reactstrap';
 import { transformDataTocm3 } from '../../../shared/helpers/utilitis';
-import { info } from 'console';
 
 const FormCapacity: FC<IFormCapacityComponent> = ({ }) => {
 
     const { setCapacityState, capacityState } = useCapacityContext();
 
+    /**handle change state on key up */
     const handleChangeStateOnKeyUp = (values: ICapacityData) => {
         setCapacityState(values);
     }
@@ -26,8 +26,8 @@ const FormCapacity: FC<IFormCapacityComponent> = ({ }) => {
                     console.log(errors, values)
                     return (
                         <Form id='formCapacities' onKeyUp={() => {
-                            setFieldValue('disponible', (values?.capacidadtotal) - transformDataTocm3(values?.lts, values?.mlts, values?.cm3))
-                            handleChangeStateOnKeyUp(values)
+                            setFieldValue('disponible', (values?.capacidadtotal) - transformDataTocm3(values?.lts, values?.mlts, values?.cm3));
+                            handleChangeStateOnKeyUp(values);
                         }} >
                             <Row>
                                 <Col sm={12} md={6}>

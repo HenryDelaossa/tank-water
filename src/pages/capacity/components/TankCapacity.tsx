@@ -1,15 +1,11 @@
-import React, { FC, useEffect, useMemo } from 'react'
+import { FC } from 'react'
 import { EValores } from '../../../shared/helpers/enums';
-import { transformDataTocm3 } from '../../../shared/helpers/utilitis';
 import { useCapacityContext } from '../../../shared/contexts/capacityContext';
 
 const TankCapacity: FC<ITankCapacityCompónent> = ({ }) => {
 
 
     const { info } = useCapacityContext();
-
-
-
 
 
     return (
@@ -42,7 +38,9 @@ const TankCapacity: FC<ITankCapacityCompónent> = ({ }) => {
                     <svg
                         viewBox="0 0 560 20"
                         className="water_wave water_wave"
-                        style={{ animation: info?.limite ? 'none' : 'wave-water .5s infinite linear' }}
+                        style={{ 
+                            display: info.cantidadtotal <= 0 ? 'none' : 'block',
+                            animation: (info?.limite) ? 'none' : 'wave-water .5s infinite linear' }}
                     >
                         <use xlinkHref="#wave"></use>
                     </svg>
