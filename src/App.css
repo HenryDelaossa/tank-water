@@ -1,0 +1,130 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.tank-cotainer {
+  width: 100%;
+  min-height: 300px;
+  position: relative;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  height: 80%;
+  width: 35%;
+  margin: 0 auto;
+  position: absolute;
+  display: flex;
+  border-radius: 12px;
+  background-color: #6f7baa80;
+  overflow: hidden;
+}
+
+.box .percent {
+  width: 80%;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  z-index: 3;
+  text-align: center;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 3rem;
+}
+
+.box .water {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  transform: translate(0, 100%);
+  background: #229bb3;
+  transition: all 0.3s;
+}
+
+.box .water_wave {
+  width: 200%;
+  position: absolute;
+  bottom: 100%;
+  margin-bottom: -2px;
+  fill: #229bb3;
+  /* animation: wave-water 0.7s infinite linear; */
+}
+
+
+@keyframes wave-water {
+  100% {
+    transform: translate(-50%, 0);
+  }
+}
+
+/* medidor */
+.col-meter {
+  transform: translate(250%, 10%);
+}
+
+.meter-container {
+  width: 10px;
+  height: 80%;
+  background: #6f7baa80;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.meter-indicator {
+  width: 100%;
+  background: #229bb3;
+  float: left;
+  bottom: 0;
+  transition: all .3s;
+}
+
+.meter-arrow {
+  width: 20px;
+  height: 20px;
+  background: #229bb3;
+  z-index: 5;
+  position: absolute;
+  margin-top: 1px;
+  left: 95%;
+  background: linear-gradient(90deg, #229bb3 0%, #229bb3 100%);
+  clip-path: polygon(100% 15%, 0 50%, 100% 85%);
+  transition: all .3s;
+}
+.meter-indicator p {
+  margin-left: 3rem;
+}
+
+
+form {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.button-save {
+  background: #229bb3;
+}
+
+.button-save:hover {
+  background: #188aa1;
+}
+
+.button-save:disabled {
+  background: #6f7baa80;
+  opacity: 0.8;
+}
+
+.button-clear:hover {
+  background: #188aa1;
+  color: #fff;
+}
