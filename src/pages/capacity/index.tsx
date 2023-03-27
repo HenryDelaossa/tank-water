@@ -11,13 +11,17 @@ const Capacity: FC = () => {
   // hooks
   const params = useParams();
   // contexts
-  const { getCapacityData } = useCapacityContext();
+  const {
+    capacityState,
+    info,
+    getCapacityData,
+    setCapacityState,
+    createSaveCapacityData
+  } = useCapacityContext();
 
+  
   useEffect(() => {
-    if (params && params?.id) {
-      getCapacityData(params?.id);
-    }
-
+    (params && params?.id) && getCapacityData(params?.id);
   }, [params])
 
 
@@ -25,14 +29,14 @@ const Capacity: FC = () => {
     <Col md={12} sm={12} xl={12}>
       <Row>
         <Col md={1} sm={1} className='d-flex justify-content-end col-meter'>
-          <MeterCapacity />
+          <MeterCapacity info={info} />
         </Col>
         <Col md={11} className='d-flex justify-content-start'>
-          <TankCapacity />
+          <TankCapacity info={info} />
         </Col>
       </Row>
       <Row>
-        <FormCapacity />
+        <FormCapacity data={capacityState} setCapacityState={setCapacityState} onSubmit={createSaveCapacityData} />
       </Row>
     </Col>
   )

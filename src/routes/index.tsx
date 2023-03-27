@@ -9,7 +9,8 @@ const Router:FC = () => {
         <BrowserRouter>
             <Routes>
                 <Route  path='/' element={<Home />} />
-                <Route path='/capacity/:id' element={<Capacity />} />
+                <Route path='/capacity/edit/:id' element={<Capacity />} />
+                <Route path='*' element={<>404</>}/>
             </Routes>
         </BrowserRouter>
     )

@@ -1,11 +1,10 @@
 import { FC } from 'react'
 import { EValores } from '../../../shared/helpers/enums';
-import { useCapacityContext } from '../../../shared/contexts/capacityContext';
+import { IInfoCalcCapacity } from '../../../core/models/capacityModels';
 
-const TankCapacity: FC<ITankCapacityCompónent> = ({ }) => {
+const TankCapacity: FC<ITankCapacityCompónent> = ({info }) => {
 
 
-    const { info } = useCapacityContext();
 
 
     return (
@@ -50,6 +49,8 @@ const TankCapacity: FC<ITankCapacityCompónent> = ({ }) => {
     )
 }
 
-interface ITankCapacityCompónent { }
+interface ITankCapacityCompónent {
+    info: IInfoCalcCapacity
+ }
 
 export default TankCapacity

@@ -1,32 +1,36 @@
-import { FC } from 'react'
+import { Dispatch, FC, SetStateAction } from 'react'
 import { Formik, Form, Field, FormikProps } from 'formik'
-import { ICapacityData, initialValuesCapacityForm, validatioSchemaCapacityForm } from '../../../core/models/capacityModels'
-import { useCapacityContext } from '../../../shared/contexts/capacityContext';
-import { Input, Row, Col, FormGroup, Label, Button, FormFeedback } from 'reactstrap';
+import { ICapacityData, initialValuesCapacityForm, validatioSchemaCapacityForm } from '../../../core/models/capacityModels';
+import { Input, Row, Col, FormGroup, Label, FormFeedback } from 'reactstrap';
 import { transformDataTocm3 } from '../../../shared/helpers/utilitis';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { useCapacityContext } from '../../../shared/contexts/capacityContext';
+import ButtonCustom from '../../../shared/components/ButtonCustom';
 
-const FormCapacity: FC<IFormCapacityComponent> = ({ }) => {
+const FormCapacity: FC<IFormCapacityComponent> = ({ data, setCapacityState, onSubmit }) => {
 
-    const { setCapacityState, capacityState } = useCapacityContext();
+    // hooks
+    const navigate = useNavigate();
+    const { info } = useCapacityContext()
 
     /**handle change state on key up */
-    const handleChangeStateOnKeyUp = (values: ICapacityData) => {
-        setCapacityState(values);
+    const handleChangeStateOnKeyUp = (
+        values: ICapacityData
+    ) => {
+        setCapacityState && setCapacityState(values);
     }
 
     return (
         <section>
             <Formik
-                enableReinitialize={false}
-                initialValues={initialValuesCapacityForm(capacityState)}
+                enableReinitialize
+                initialValues={initialValuesCapacityForm(data)}
                 validationSchema={validatioSchemaCapacityForm}
-                onSubmit={() => { }}
+                onSubmit={(values) => onSubmit({...values, disponible: info?.disponible}, navigate)}
             >
-                {({ values, errors, resetForm, setFieldValue }: FormikProps<ICapacityData>) => {
-                    console.log(errors, values)
+                {({ values, errors, resetForm, isSubmitting}: FormikProps<ICapacityData>) => {
                     return (
                         <Form id='formCapacities' onKeyUp={() => {
-                            setFieldValue('disponible', (values?.capacidadtotal) - transformDataTocm3(values?.lts, values?.mlts, values?.cm3));
                             handleChangeStateOnKeyUp(values);
                         }} >
                             <Row>
@@ -84,7 +88,7 @@ const FormCapacity: FC<IFormCapacityComponent> = ({ }) => {
                                             as={Input}
                                             type="number"
                                             name="disponible"
-                                            value={values?.disponible <= 0 ? 0 : values?.disponible}
+                                            value={info?.disponible}
                                             disabled
                                         />
                                     </FormGroup>
@@ -92,26 +96,27 @@ const FormCapacity: FC<IFormCapacityComponent> = ({ }) => {
                             </Row>
                             <Row>
                                 <Col sm={12} md={6}>
-                                    <Button
+                                    <ButtonCustom
                                         type='button'
                                         color='info'
                                         className='button-clear w-100 btn-light'
                                         outline
+                                        loading={isSubmitting}
                                         onClick={() => {
                                             resetForm();
-                                            setCapacityState({ ...values, disponible: 0 })
                                         }}
                                     >
                                         {'Limpiar'}
-                                    </Button>
+                                    </ButtonCustom>
                                 </Col>
                                 <Col sm={12} md={6}>
-                                    <Button
+                                    <ButtonCustom
                                         type='submit'
                                         className='button-save w-100'
-                                        disabled={transformDataTocm3(values?.lts, values?.mlts, values?.cm3) > capacityState?.capacidadtotal}>
+                                        loading={isSubmitting}
+                                        disabled={transformDataTocm3(values?.lts, values?.mlts, values?.cm3) > values?.capacidadtotal}>
                                         {'Guardar'}
-                                    </Button>
+                                    </ButtonCustom>
                                 </Col>
                             </Row>
                         </Form>
@@ -124,7 +129,9 @@ const FormCapacity: FC<IFormCapacityComponent> = ({ }) => {
 }
 
 interface IFormCapacityComponent {
-
+    data: ICapacityData,
+    onSubmit: (values: ICapacityData, navegate: NavigateFunction) => void
+    setCapacityState?: Dispatch<SetStateAction<ICapacityData>>
 }
 
 export default FormCapacity

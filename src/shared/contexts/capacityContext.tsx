@@ -1,15 +1,18 @@
-import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, useContext, useMemo, useState } from 'react';
 import { ICapacityContext, ICapacityData } from '../../core/models/capacityModels';
 import { EValores } from '../helpers/enums';
 import { transformDataTocm3 } from '../helpers/utilitis';
-import { capacityShowService } from '../../core/services/capacityServices';
+import { capacityCreateUpdateService, capacityShowService } from '../../core/services/capacityServices';
+import { NavigateFunction } from 'react-router-dom';
 
 const initialState: ICapacityContext = {
     capacityState: { lts: 0, mlts: 0, cm3: 0, capacidadtotal: 0, id: null, disponible: 0 },
     setCapacityState: () => { },
     getCapacityData: () => { },
+    createSaveCapacityData: () => { },
     info: { porcentaje: 0, limite: false, cantidadtotal: 0, disponible: 0 }
 };
+
 export const capacityContext = createContext<ICapacityContext>(initialState);
 
 export const CapacityProvider = ({ children }: PropsWithChildren) => {
@@ -21,10 +24,10 @@ export const CapacityProvider = ({ children }: PropsWithChildren) => {
     /**calculos necesarios */
     const info = useMemo(() => {
 
-        const cantidadtotal = transformDataTocm3(capacity?.lts, capacity?.mlts, capacity?.cm3);
-        const porcentaje = (cantidadtotal / capacity?.capacidadtotal) * (EValores.PERCENT_100) || 0;
+        const cantidadtotal = transformDataTocm3(Number(capacity?.lts), Number(capacity?.mlts), Number(capacity?.cm3));
+        const porcentaje = (cantidadtotal / Number(capacity?.capacidadtotal)) * (EValores.PERCENT_100) || 0;
         const limite = porcentaje > EValores.PERCENT_100;
-        const disponible = capacity?.capacidadtotal - cantidadtotal;
+        const disponible = Number(capacity?.capacidadtotal) - cantidadtotal;
 
         return {
             porcentaje,
@@ -37,16 +40,18 @@ export const CapacityProvider = ({ children }: PropsWithChildren) => {
 
 
     /**fucion para obtener data por id segun params */
-    const getCapacityData = async (id: number | string) => {
+    const getCapacityData = async (id?: string) => {
         const resp = await capacityShowService(id);
-        setCapacity(resp?.data)
+        setCapacity(resp?.data || initialState?.capacityState)
     }
 
-
-
-    useEffect(() => {
-        setCapacity(capacity);
-    }, [capacity]);
+    const createSaveCapacityData = async (values: ICapacityData, navegate: NavigateFunction) => {
+        const resp = await capacityCreateUpdateService(values);
+        if (resp && resp?.data?.id && !values?.id) {
+            navegate(`/capacity/edit/${resp?.data?.id}`, {replace:true});
+        }
+        setCapacity(resp?.data)
+    }   
 
     return (
         <capacityContext.Provider
@@ -54,6 +59,7 @@ export const CapacityProvider = ({ children }: PropsWithChildren) => {
                 capacityState: capacity,
                 setCapacityState: setCapacity,
                 getCapacityData,
+                createSaveCapacityData,
                 info
             }}
         >
